@@ -1,0 +1,21 @@
+version: '3.1'
+
+volumes:
+    metadata_data: {}
+    
+services:
+    postgres:
+      container_name: postgres
+      image: postgres:latest
+      volumes:
+        - metadata_data:/var/lib/postgresql/data
+      environment:
+        - POSTGRES_PASSWORD=FoolishPassword
+        - POSTGRES_USER=druid
+        - POSTGRES_DB=druid
+
+networks:
+  default:
+    external:
+      name: backend
+

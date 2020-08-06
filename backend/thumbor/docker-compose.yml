@@ -1,0 +1,44 @@
+version: '3'
+services:
+  thumbor:
+    image: minimalcompact/thumbor
+    environment:
+      - LOG_LEVEL=DEBUG
+      #- ALLOW_UNSAFE_URL=False
+      - DETECTORS=['thumbor.detectors.feature_detector','thumbor.detectors.face_detector']
+      - AWS_ACCESS_KEY_ID=minio # put your AWS_ACCESS_KEY_ID here
+      - AWS_SECRET_ACCESS_KEY=minio123 # put your AWS_SECRET_ACCESS_KEY here
+      # Is needed for buckets that demand the new signing algorithm (v4)
+      # - S3_USE_SIGV4=true
+      # - TC_AWS_REGION=eu-central-1
+      - TC_AWS_REGION=cn-east-1
+      - TC_AWS_ENDPOINT=http://minio1:9000
+      - TC_AWS_ENABLE_HTTP_LOADER=False
+      - TC_AWS_ALLOWED_BUCKETS=False
+      # loader
+      - LOADER=tc_aws.loaders.s3_loader
+      - TC_AWS_LOADER_BUCKET=images
+      # STORAGE
+    #   - STORAGE=tc_aws.storages.s3_storage
+    #   - TC_AWS_STORAGE_BUCKET=thumbor-storage
+    #   - TC_AWS_STORAGE_ROOT_PATH=storage
+      #RESULT_STORAGE
+      - RESULT_STORAGE=tc_aws.result_storages.s3_storage
+      - TC_AWS_RESULT_STORAGE_BUCKET=thumbor-storage
+      - TC_AWS_RESULT_STORAGE_ROOT_PATH=result-storage
+      - RESULT_STORAGE_STORES_UNSAFE=True
+      - STORAGE_EXPIRATION_SECONDS=None
+      - RESULT_STORAGE_EXPIRATION_SECONDS=None
+    restart: always
+    ports:
+      - "8002:80" 
+    volumes:
+      # mounting a /data folder to store cached images
+      - data:/data
+    restart: always
+volumes:
+  data:
+networks:
+  default:
+    external:
+      name: backend

@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      tier: frontend
+    matchExpressions:
+      - { key: tier, operator: In, values: [frontend] }
+  template:
+    metadata:
+      labels:
+        app: app-demo
+        tier: frontend
+    spec:
+      volumes:
+        - name: datavol
+          emptyDir: {}
+      containers:
+        - image: tomcat
+          name: tomcat-demo
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: datavol
+              mountPath: /mydata-data

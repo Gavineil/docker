@@ -1,0 +1,11 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: tomcat-service
+spec:
+  type: NodePort
+  selector:
+    tier: frontend
+  ports:
+    - port: 8080
+      nodePort: 31002

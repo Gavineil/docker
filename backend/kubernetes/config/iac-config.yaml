@@ -1,0 +1,26 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: iac
+data:
+  application.yml: |-
+    ac:
+      greeting: Say Hello to the World default
+      farewell: Say Goodbye default
+    ---
+    spring:
+      profiles: development
+    ac:
+      greeting: Say Hello to the World development
+      farewell: Say Goodbye development
+    ---
+    spring:
+      profiles: production
+      datasource:
+        driver-class-name: org.postgresql.Driver
+        username: postgres
+        password: 123456
+        url: jdbc:postgresql://postgresql:5432/demo
+    ac:
+      greeting: Say Hello to the World production
+      farewell: Say Goodbye production
