@@ -1,0 +1,29 @@
+
+#---由于 ElasticSearch 已经带上 Xpack 插件等---
+#---所以这里我们也不用默认的OSS镜像，去掉OSS用标准镜像---
+image:
+  repository: "docker.elastic.co/kibana/kibana"
+  tag: "6.7.0"
+  
+#---设置Service网络模式为NodePort---
+service:
+  type: NodePort 
+  
+#---创建RBAC的权限角色---
+serviceAccount:
+  create: true   
+  
+files:
+  kibana.yml:
+    server.name: kibana
+    server.host: "0"
+    #---设置为 ES 负载节点地址，这个地址请按集群情况修改
+    elasticsearch.hosts: http://elasticsearch-master:9200  
+ 
+#---设置资源限制---
+resources:    
+  limits:
+    cpu: 100m
+    memory: 500Mi
+  requests:
+    cpu: 100m
